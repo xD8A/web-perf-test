@@ -1,0 +1,10 @@
+{
+    "rdbms":"postgresql",
+    "host": "db",
+    "port": 5432,
+    "dbname": "web",
+    "user": "web",
+    "passwd": "password",
+    "is_fast": false,
+    "tables": ["answers"]
+}

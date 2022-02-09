@@ -1,0 +1,10 @@
+{
+    "rdbms":"mysql",
+    "host": "db",
+    "port": 3306,
+    "dbname": "web",
+    "user": "web",
+    "passwd": "password",
+    "is_fast": false,
+    "tables": ["answers"]
+}

@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - 5000:8080
+    depends_on:
+      #db:
+      #  condition: service_healthy
+      - db
+  db:
+    image: mariadb:10.7
+    environment:
+      - MARIADB_ROOT_PASSWORD=rootpwd
+      - MARIADB_USER=web
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=web
+    #healthcheck:
+    #  test: ["CMD", "echo", "0"]
+    #  #test: ["CMD", "if [ $(mysql -u web -ppassword web -s -r -N -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'web';\") -eq '1' ] ; then echo 0; else echo 1; fi"]
+    #  timeout: 20s
+    #  retries: 10
+    ports:
+      - 3306:3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
