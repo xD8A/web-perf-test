@@ -1,14 +1,14 @@
 FROM debian:11-slim AS base
 
-RUN DEBIAN_FRONTEND=noninteractive apt update -y \
-    && apt-get install -y git gcc g++ cmake libjsoncpp-dev uuid-dev libssl-dev zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
-RUN DEBIAN_FRONTEND=noninteractive apt update -y \
-    && apt-get install -y libmariadb-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 
 FROM base AS build
+
+ENV DEBIAN_FRONTEND=noninteractive 
+RUN apt-get update -y
+RUN apt-get install -y git gcc g++ cmake libjsoncpp-dev uuid-dev libssl-dev zlib1g-dev
+#RUN apt-get install -y postgresql-all libmariadb-dev libsqlite3-dev
+RUN apt-get install -y libmariadb-dev
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
 RUN git clone https://github.com/an-tao/drogon
@@ -35,6 +35,10 @@ RUN make
 
 
 FROM base AS final
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -y \
+    && apt-get install -y libjsoncpp24 uuid libssl1.1 zlib1g libmariadb3 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=build /app/build .
